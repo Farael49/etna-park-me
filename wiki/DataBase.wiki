@@ -5,13 +5,17 @@ Dans le cadre du projet ParkMe, une DataBase MySQL est mise en place afin de sto
 
 = Details =
 
-Le schéma de la DataBase est le suivant : 
-
+La table est construite ainsi : 
+  # || Nom || Type ||
 ==user==
-  # PK:mail
-  # cryptedPwd (ou token)
+  # || PK:id || int ||
+  # || Unique:mail || VARCHAR ||
+  # || crypted_pwd [[ VARCHAR || (ou token)
   # ...
 
+==vehicle==
+  # PK:id
+  # 
 ==parking_spot==
   # lat
   # lng
