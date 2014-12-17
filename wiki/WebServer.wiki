@@ -1,0 +1,11 @@
+#Présentation du Web Server
+
+= Introduction =
+
+Un WebServer est mis en place afin de pouvoir appeler un script PHP permettant d'intéragir avec la DataBase.
+
+
+= Details =
+
+Pour le moment, la solution envisagée est simplement de déployer un serveur Apache sur une machine que l'on peut contacter à distance. 
+Dans le cadre du développement / des tests / de la présentation, un dummy webservice est envisageable, pointant sur une config locale.
