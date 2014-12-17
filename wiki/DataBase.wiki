@@ -23,6 +23,6 @@ Les tables sont décrites ainsi :
   # || PK:id || INT ||
   # || lat || FLOAT ||
   # || lng || FLOAT ||
-  # || user_id || INT ||
+  # || FK_user:user_id || INT ||
   # || time_when_ready || TIMEDATE ||
   # ...
