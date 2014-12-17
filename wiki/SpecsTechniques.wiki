@@ -5,7 +5,7 @@
   * *Supports visés *: Smartphones
   * *Langage *: Java
   * *IDE *: Eclipse / Android Studio
-  * *DataBase* : MySQL
-  * * WebServer* : PHP Script pour les opérations CRUD sur la DB.  
+  * *DataBase* * : MySQL
+  * * WebServer* * : PHP Script pour les opérations CRUD* sur la DB.  
   * *Connexion Internet nécessaire*
   * *API Externes Utilisées *: Google Maps / Parking France Gouv
