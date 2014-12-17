@@ -5,18 +5,24 @@ Dans le cadre du projet ParkMe, une DataBase MySQL est mise en place afin de sto
 
 = Details =
 
-La table est construite ainsi : 
-  # || Nom || Type ||
+Les tables sont décrites ainsi : 
+  * || Nom || Type ||
 ==user==
-  # || PK:id || int ||
+  # || PK:id || INT||
   # || Unique:mail || VARCHAR ||
-  # || crypted_pwd [[ VARCHAR || (ou token)
-  # ...
-
+  # || crypted_pwd (ou token) || VARCHAR ||
+ 
 ==vehicle==
-  # PK:id
-  # 
+  # || PK:id || INT ||
+  # || type || VARCHAR ||
+  # || photo || VARCHAR ||
+  # || FK_user:user_id || INT ||
+  # || description || VARCHAR ||
+
 ==parking_spot==
-  # lat
-  # lng
+  # || PK:id || INT ||
+  # || lat || FLOAT ||
+  # || lng || FLOAT ||
+  # || user_id || INT ||
+  # || time_when_ready || TIMEDATE ||
   # ...
