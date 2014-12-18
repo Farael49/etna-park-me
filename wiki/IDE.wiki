@@ -1,4 +1,4 @@
-#Explications sur les IDE utilisables
+#summary Explications sur les IDE utilisables
 
 Deux principaux IDE sont utilisables pour développer en Java et sous Android : Eclipse et Android Studio
 
@@ -11,13 +11,14 @@ Eclipse fut le principal IDE utilisé pour développer sur Android, à l'aide du
   * Android Studio est relativement récent (une version bêta était à depuis plusieurs mois, mais la version stable officielle n'a qu'un ou deux mois), est amené à évoluer fortement, mais ne dispose pas encore d'une grosse communauté, même s'il est basé sur la même logique que d'autres IDE. C'est un choix logique dans le cadre d'une entreprise amenée à évoluer sous Android, mais n'est pas forcément le plus simple à l'heure actuelle. 
 
 Personnellement, j'utiliserais Eclipse, ayant plus d'expérience avec son fonctionnement et ses raccourcis (Android Studio ne dispose pas des mêmes keybinds...), et ayant déjà développé de nombreux projets Java et quelques projets Android avec. 
+
 Il est tout à fait possible de faire correspondre un projet Eclipse et un projet Android Studio, cependant quelques changements seront nécessaires. Une fois le projet importé (en précisant que ce n'est pas un projet Android Studio), il sera nécessaire de porter attention aux fichiers modifiés sur le svn afin de ne faire évoluer que les quelques classes impactées lors des changements, car chaque IDE crée sa propre architecture de dossiers/fichiers (Donc les changements seront à reporter à la main/un par un, et pas via un svn update du workspace entier).
 
 == Configuration ==
-Il sera nécessaire d'avoir : 
-Un IDE à jour.
-Un JRE ou un JDK récent.
-Dans le cadre d'Eclipse, télécharger l'ADT via le menu "Help"->"Check MarketPlace" et chercher "Android Development Tools for Eclipse" by Google, Inc., et télécharger le SDK Android sur Internet.
+Il sera nécessaire d'avoir : <br> 
+Un IDE à jour.<br>
+Un JRE ou un JDK récent.<br>
+Dans le cadre d'Eclipse, télécharger l'ADT via le menu "Help"->"Check Market Place" et chercher "Android Development Tools for Eclipse" by Google, Inc., et télécharger le SDK Android sur Internet.
 Le téléchargement d'Android Studio inclue en général le SDK et l'ADT est intégré à l'IDE.
 
 == Android SDK Manager ==
