@@ -1,4 +1,4 @@
-# Details about the DataBase
+#summary Details about the DataBase
 
 = Introduction =
 Dans le cadre du projet ParkMe, une DataBase MySQL est mise en place afin de stocker les informations propres aux utilisateurs et aux places de parking proposées.
