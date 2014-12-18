@@ -1,5 +1,5 @@
 #labels Phase-Requirements
-= =
+= Spécifications Techniques =
   * * Plateforme* : Android 
   * * Version* : 4.XX (+ de 90% des appareils Android > 4.0) / API >= 15
   * * Supports visés *: Smartphones
