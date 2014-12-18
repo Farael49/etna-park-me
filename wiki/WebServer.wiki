@@ -1,4 +1,4 @@
-#Présentation du Web Server
+#summary Présentation du Web Server
 
 = Introduction =
 
@@ -7,5 +7,5 @@ Un WebServer est mis en place afin de pouvoir appeler un script PHP permettant d
 
 = Details =
 
-Pour le moment, la solution envisagée est simplement de déployer un serveur Apache sur une machine que l'on peut contacter à distance. 
+Pour le moment, la solution envisagée est simplement de déployer un serveur Apache sur une machine que l'on peut contacter à distance. L'objectif est de contacter le serveur avec le smartphone en envoyant une requete HTTP et en passant en paramètre via GET ou POST les données utiles au script. 
 Dans le cadre du développement / des tests / de la présentation, un dummy webservice est envisageable, pointant sur une config locale.
