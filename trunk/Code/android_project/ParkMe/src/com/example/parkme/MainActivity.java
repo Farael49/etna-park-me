@@ -4,9 +4,9 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +23,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		// try to log
+		new LoginServ().execute();
 
 		// Buttons
 		btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -88,16 +90,10 @@ public class MainActivity extends Activity {
 			String password = args[1];
 			AccountManager accountManager = AccountManager
 					.get(getApplicationContext());
-			Account[] accounts = accountManager
-					.getAccountsByType("com.example.parkme");
-			if (User.getInstance().isAuthenticated)
-				ServerRequests.addSpot(15.5f, 25.2f, 150, User.getInstance());
+			if (User.isAuthenticated)
+				ServerRequests.addSpot(15.5f, 25.2f, 150,
+						User.getInstance(args[0]));
 			else {
-				for (Account account : accounts) {
-					if(ServerRequests.authenticate(account.name, accountManager.getPassword(account)))
-						break;
-				}
-
 				Account account = new Account(args[0], "com.example.parkme");
 				accountManager.addAccountExplicitly(account, password, null);
 			}
@@ -110,6 +106,56 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once done
 			pDialog.dismiss();
+		}
+
+	}
+
+	/**
+	 * Background sync Task to login
+	 * */
+	class LoginServ extends  AsyncTask<String, String, String> {
+		private ProgressDialog pDialog;
+
+		/**
+		 * Before starting background thread Show Progress Dialog
+		 * */
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pDialog = new ProgressDialog(MainActivity.this);
+			pDialog.setMessage("Logging, please wait.");
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			pDialog.show();
+		}
+
+		private void loggingWithAccountManager(AccountManager accountManager,
+				Account[] accounts) {
+			for (Account account : accounts) {
+				if (ServerRequests.authenticate(account.name,
+						accountManager.getPassword(account)))
+					break;
+			}
+		}
+
+		protected String doInBackground(String... args) {
+			AccountManager accountManager = AccountManager
+					.get(getApplicationContext());
+			Account[] accounts = accountManager
+					.getAccountsByType("com.example.parkme");
+			loggingWithAccountManager(accountManager, accounts);
+			return null;
+		}
+
+		/**
+		 * After completing background task Dismiss the progress dialog
+		 * **/
+		protected void onPostExecute(String file_url) {
+			// dismiss the dialog once done
+			pDialog.dismiss();
+			if (User.isAuthenticated)
+				// goes next activity
+				Log.e("auth_status", "test" + User.isAuthenticated);
 		}
 
 	}
