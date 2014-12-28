@@ -26,7 +26,7 @@ public class ServerRequests {
 	private static final String ADD_SPOT = "OFFER_SPOT";
 	private static final String AUTHENTICATE = "AUTHENTICATE";
 	private static final String SUCCESS_TAG = "success";
-	private static final String URL_CRUD_SCRIPT = "http://107.170.145.214/android_connect/test/crud.php";
+	private static final String URL_CRUD_SCRIPT = "http://107.170.145.214/android_connect/php_script/crud.php";
 	
 	public static boolean authenticate(String email, String cryptedPwd) {
 		boolean isAuthenticated = false;

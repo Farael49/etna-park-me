@@ -29,13 +29,11 @@ public class MainActivity extends Activity {
 		tvEmail = (TextView) findViewById(R.id.email);
 		tvPwd = (TextView) findViewById(R.id.password);
 
-		// view products click event
+		// login click event
 		btnLogin.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View view) {
-				// Launching create new product activity
-
 				/*
 				 * Intent i = new Intent(getApplicationContext(),
 				 * NewSpotActivity.class); startActivity(i);
@@ -68,7 +66,7 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Background Async Task to Create new product
+	 * Background Async Task to add new spot
 	 * */
 	class CreateNewSpot extends AsyncTask<String, String, String> {
 		private ProgressDialog pDialog;
@@ -86,9 +84,6 @@ public class MainActivity extends Activity {
 			pDialog.show();
 		}
 
-		/**
-		 * Creating product
-		 * */
 		protected String doInBackground(String... args) {
 			String password = args[1];
 			AccountManager accountManager = AccountManager
