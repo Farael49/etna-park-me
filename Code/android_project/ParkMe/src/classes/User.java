@@ -36,17 +36,16 @@ public class User {
 	private List<Vehicle> vehicles; // List containing User's vehicles
 	private String authToken;
 
-	public User(){
-		
-	}
-	public User(String email, String authToken) {
+/*	public User(String email){
 		this.email = email;
-		this.authToken = authToken;
+	}*/
+	public User(String email) {
+		this.email = email;
 	}
 	
-	public static User getInstance(){
+	public static User getInstance(String email){
 		if(instance==null){
-			instance = new User();
+			instance = new User(email);
 			return instance;
 		}else{
 			return instance;

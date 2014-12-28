@@ -68,14 +68,11 @@ public class ServerRequests {
 		try {
 			JSONObject jObject = new JSONObject(result);
 			if (jObject.getInt(SUCCESS_TAG) == 1)
-				isAuthenticated = true;
-			else
-				isAuthenticated = false;
+				User.getInstance(email).isAuthenticated = true;
 		} catch (JSONException e) {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
-		User.getInstance().isAuthenticated = isAuthenticated;
-		return isAuthenticated;
+		return User.isAuthenticated;
 	}
 
 	public static void addSpot(float lat, float lng, int time_rdy, User user) {
