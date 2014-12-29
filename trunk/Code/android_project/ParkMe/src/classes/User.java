@@ -8,7 +8,8 @@ import java.util.List;
 public class User {
 	private String email; // Used as an ID, not PID
 	private static User instance;
-	public static boolean isAuthenticated;
+	private boolean isAuthenticated;
+
 	public String getEmail() {
 		return email;
 	}
@@ -36,19 +37,23 @@ public class User {
 	private List<Vehicle> vehicles; // List containing User's vehicles
 	private String authToken;
 
-/*	public User(String email){
-		this.email = email;
-	}*/
-	public User(String email) {
-		this.email = email;
+	public User() {
 	}
-	
-	public static User getInstance(String email){
-		if(instance==null){
-			instance = new User(email);
+
+	public static User getInstance() {
+		if (instance == null) {
+			instance = new User();
 			return instance;
-		}else{
+		} else {
 			return instance;
 		}
+	}
+
+	public boolean isAuthenticated() {
+		return isAuthenticated;
+	}
+
+	public void setAuthenticated(boolean isAuthenticated) {
+		this.isAuthenticated = isAuthenticated;
 	}
 }

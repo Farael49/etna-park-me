@@ -30,7 +30,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_requests" >
+            android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,20 +38,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GetSpotsActivity"
-            android:label="@string/title_activity_get_spots" >
-        </activity>
-        <activity
-            android:name=".AllSpotsActivity"
-            android:label="@string/title_activity_all_spots" >
-        </activity>
-        <activity
-            android:name=".NewSpotActivity"
-            android:label="@string/title_activity_new_spot" >
-        </activity>
-        <activity
-            android:name=".EditSpotActivity"
-            android:label="@string/title_activity_edit_spot" >
+            android:name=".AddSpotActivity"
+            android:label="@string/title_activity_add_spot" >
         </activity>
     </application>
 
