@@ -1,0 +1,1 @@
+La DB fournie ne comporte que la structure (vide de données), et elle est amenée à changer pour mieux répondre aux besoins de l'application.
