@@ -5,9 +5,9 @@
 Nous allons voir comment déployer le webservice et lancer l'application.
 
 
-= WebService =
+= `WebService` =
 
-Le WebService nécessite un environnement LAMP/WAMP/MAMP accessible en ligne. Pour rendre votre serveur local accessible, il suffit de configurer votre routeur afin de rediriger le port 80 vers l'ip de la machine faisant tourner votre serveur. La vidéo http://youtu.be/-rKDhZJignU?t=2m46s explique si besoin comment faire, la partie sur DynDNS est inutile car vous vous servirez simplement de l'ip de votre routeur dans le cadre des tests. 
+Le `WebService` nécessite un environnement LAMP/WAMP/MAMP accessible en ligne. Pour rendre votre serveur local accessible, il suffit de configurer votre routeur afin de rediriger le port 80 vers l'ip de la machine faisant tourner votre serveur. La vidéo http://youtu.be/-rKDhZJignU?t=2m46s explique si besoin comment faire, la partie sur DynDNS est inutile car vous vous servirez simplement de l'ip de votre routeur dans le cadre des tests. 
 Une fois votre serveur accessible en ligne (http://ip_de_votre_routeur/) : 
   # Importez la DataBase (via PhpMyAdmin par exemple) récupérée dans /trunk/DataBase/ 
   # Mettez le dossier script_php (/trunk/Code/script_php) dans votre www directory 
