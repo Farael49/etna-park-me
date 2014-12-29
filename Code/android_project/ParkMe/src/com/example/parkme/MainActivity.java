@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import classes.ServerRequests;
 import classes.User;
+import classes.Utils;
 
 public class MainActivity extends Activity {
 	Button btnLogin;
@@ -24,8 +26,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		// try to log
-		new LoginServ().execute();
-
+		new SignInWithAccountManager().execute();
 		// Buttons
 		btnLogin = (Button) findViewById(R.id.btnLogin);
 		tvEmail = (TextView) findViewById(R.id.email);
@@ -42,8 +43,11 @@ public class MainActivity extends Activity {
 				 */
 				String email = tvEmail.getText().toString();
 				String pwd = tvPwd.getText().toString();
-
-				new CreateNewSpot().execute(email, pwd);
+				if (email.length() > 3 && pwd.length() > 3)
+					new SignInManual().execute(email, pwd);
+				else
+					Utils.showToastText(getApplicationContext(),
+							"Renseignez correctement vos identifiants.");
 			}
 		});
 	}
@@ -68,9 +72,9 @@ public class MainActivity extends Activity {
 	}
 
 	/**
-	 * Background Async Task to add new spot
+	 * Background Async Task to sign in
 	 * */
-	class CreateNewSpot extends AsyncTask<String, String, String> {
+	class SignInManual extends AsyncTask<String, String, String> {
 		private ProgressDialog pDialog;
 
 		/**
@@ -80,23 +84,27 @@ public class MainActivity extends Activity {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pDialog = new ProgressDialog(MainActivity.this);
-			pDialog.setMessage("Adding Spot..");
+			pDialog.setMessage("Connecting ...");
 			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(true);
+			pDialog.setCancelable(false);
 			pDialog.show();
 		}
 
 		protected String doInBackground(String... args) {
+			String email = args[0];
 			String password = args[1];
-			AccountManager accountManager = AccountManager
-					.get(getApplicationContext());
-			if (User.isAuthenticated)
-				ServerRequests.addSpot(15.5f, 25.2f, 150,
-						User.getInstance(args[0]));
-			else {
-				Account account = new Account(args[0], "com.example.parkme");
+
+			if (ServerRequests.authenticate(email, password)) {
+				AccountManager accountManager = AccountManager
+						.get(getApplicationContext());
+				Account account = new Account(email, "com.example.parkme");
 				accountManager.addAccountExplicitly(account, password, null);
+				/*
+				 * if (User.isAuthenticated) ServerRequests.addSpot(15.5f,
+				 * 25.2f, 150, User.getInstance(args[0])); else {
+				 */
 			}
+
 			return null;
 		}
 
@@ -106,6 +114,11 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once done
 			pDialog.dismiss();
+			if (User.getInstance().isAuthenticated()) {
+				// new SignInWithAccountManager().execute();
+				Intent i = new Intent(MainActivity.this, AddSpotActivity.class);
+				startActivity(i);
+			}
 		}
 
 	}
@@ -113,7 +126,7 @@ public class MainActivity extends Activity {
 	/**
 	 * Background sync Task to login
 	 * */
-	class LoginServ extends  AsyncTask<String, String, String> {
+	class SignInWithAccountManager extends AsyncTask<String, String, String> {
 		private ProgressDialog pDialog;
 
 		/**
@@ -133,8 +146,14 @@ public class MainActivity extends Activity {
 				Account[] accounts) {
 			for (Account account : accounts) {
 				if (ServerRequests.authenticate(account.name,
-						accountManager.getPassword(account)))
+						accountManager.getPassword(account))) {
 					break;
+
+					/*
+					 * if (User.isAuthenticated) ServerRequests.addSpot(15.5f,
+					 * 25.2f, 150, User.getInstance(args[0])); else {
+					 */
+				}
 			}
 		}
 
@@ -153,9 +172,16 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once done
 			pDialog.dismiss();
-			if (User.isAuthenticated)
+			if (User.getInstance().isAuthenticated()) {
 				// goes next activity
-				Log.e("auth_status", "test" + User.isAuthenticated);
+				Log.e("auth_status", "test"
+						+ User.getInstance().isAuthenticated());
+				Log.i("PM", "Launching AddSpotActivity");
+				Intent i = new Intent(MainActivity.this, AddSpotActivity.class);
+				startActivity(i);
+			} else {
+				Utils.showToastText(getApplicationContext(), "Please enter your credentials");
+			}
 		}
 
 	}

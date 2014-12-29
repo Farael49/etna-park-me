@@ -22,12 +22,12 @@ import android.util.Log;
  * Created by Christophe on 16/12/2014.
  */
 public class ServerRequests {
-	
+
 	private static final String ADD_SPOT = "OFFER_SPOT";
 	private static final String AUTHENTICATE = "AUTHENTICATE";
 	private static final String SUCCESS_TAG = "success";
 	private static final String URL_CRUD_SCRIPT = "http://107.170.145.214/android_connect/php_script/crud.php";
-	
+
 	public static boolean authenticate(String email, String cryptedPwd) {
 		boolean isAuthenticated = false;
 		String result = "";
@@ -67,24 +67,29 @@ public class ServerRequests {
 		// parse json data
 		try {
 			JSONObject jObject = new JSONObject(result);
-			if (jObject.getInt(SUCCESS_TAG) == 1)
-				User.getInstance(email).isAuthenticated = true;
+			if (jObject.getInt(SUCCESS_TAG) == 1) {
+				User.getInstance().setEmail(email);
+				User.getInstance().setAuthenticated(true);
+			}
 		} catch (JSONException e) {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
-		return User.isAuthenticated;
+		return User.getInstance().isAuthenticated();
 	}
 
-	public static void addSpot(float lat, float lng, int time_rdy, User user) {
+	public static void addSpot(float lat, float lng, int time_rdy) {
 		String result = "";
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("action", ADD_SPOT));
 		nameValuePairs.add(new BasicNameValuePair("lat", Float.toString(lat)));
 		nameValuePairs.add(new BasicNameValuePair("lng", Float.toString(lng)));
-		nameValuePairs.add(new BasicNameValuePair("email", user.getEmail()));
-		nameValuePairs.add(new BasicNameValuePair("token", user.getAuthToken()));
-		nameValuePairs.add(new BasicNameValuePair("user_id", Integer.toString(1)));
-		nameValuePairs.add(new BasicNameValuePair("time_when_ready", Integer.toString(time_rdy)));
+		// nameValuePairs.add(new BasicNameValuePair("email", User.getEmail()));
+		// nameValuePairs.add(new BasicNameValuePair("token",
+		// user.getAuthToken()));
+		nameValuePairs.add(new BasicNameValuePair("user_id", Integer
+				.toString(1)));
+		nameValuePairs.add(new BasicNameValuePair("time_when_ready", Integer
+				.toString(time_rdy)));
 
 		InputStream is = null;
 		// http post
