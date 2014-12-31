@@ -2,13 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
- 
-    <!--  Sample Dashboard screen with one button atm -->
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <!-- Sample Dashboard screen with one button atm -->
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showDatePickerDialog"
+        android:text="Date"
+        android:clickable="true" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="showTimePickerDialog"
+        android:text="Time"
+        android:clickable="true" />
 
     <NumberPicker
-        android:id="@+id/numberPicker1"
+        android:id="@+id/numberPicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -36,10 +52,11 @@
         android:ems="10"
         android:inputType="numberDecimal" />
 
-    <Button android:id="@+id/btnSubmit"
+    <Button
+        android:id="@+id/btnSubmit"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Submit"
-        android:layout_marginTop="25dip"/>
- 
+        android:layout_marginTop="25dip"
+        android:text="Submit" />
+
 </LinearLayout>
