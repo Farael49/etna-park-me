@@ -77,7 +77,8 @@ public class ServerRequests {
 		return User.getInstance().isAuthenticated();
 	}
 
-	public static void addSpot(float lat, float lng, int time_rdy) {
+	public static boolean addSpot(float lat, float lng, int time_rdy) {
+		boolean success = false;
 		String result = "";
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("action", ADD_SPOT));
@@ -126,9 +127,14 @@ public class ServerRequests {
 			/*
 			 * for (int i = 0; i < jObject.length(); i++) Log.e(jObject.get)
 			 */
+			if (jObject.getInt(SUCCESS_TAG) == 1) {
+				success = true;
+			}
 		} catch (JSONException e) {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
+
+		return success;
 
 	}
 }
