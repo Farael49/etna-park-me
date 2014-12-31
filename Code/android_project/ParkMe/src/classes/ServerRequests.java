@@ -27,6 +27,24 @@ public class ServerRequests {
 	private static final String AUTHENTICATE = "AUTHENTICATE";
 	private static final String SUCCESS_TAG = "success";
 	private static final String URL_CRUD_SCRIPT = "http://107.170.145.214/android_connect/php_script/crud.php";
+	
+	/** TODO 
+	 * php script still not updated
+	 * must add : 
+	 * creating account
+	 * updating/removing spot
+	 * add constraints to the database */
+	public static boolean createAccount(String email, String password){
+		return false;
+	}
+	
+	public static boolean updateSpot(String email){
+		return false;
+	}
+	
+	public static boolean removeSpot(String email){
+		return false;
+	}
 
 	public static boolean authenticate(String email, String cryptedPwd) {
 		boolean isAuthenticated = false;
@@ -77,6 +95,7 @@ public class ServerRequests {
 		return User.getInstance().isAuthenticated();
 	}
 
+	
 	public static boolean addSpot(float lat, float lng, int time_rdy) {
 		boolean success = false;
 		String result = "";
