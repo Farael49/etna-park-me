@@ -90,26 +90,27 @@ function add_spot(){
 		{
 		// utilisation d'un PDO avec prepare / execute pour l'Insertion
 			$auth = dbconnexion();
+			$user_id = authenticate_user();
 			$stmt = $auth->prepare(
 				'INSERT INTO parking_spot (lat, lng, user_id, date_offer, time_when_ready, reserved)
 				VALUES (:lat, :lng, :user_id, :date_offer, :time_when_ready, false);');
 			/*** bind les variables au statement pour s'assurer des entrées ***/
 			$stmt->bindParam(':lat', $_POST['lat'], PDO::PARAM_STR);
 			$stmt->bindParam(':lng', $_POST['lng'], PDO::PARAM_STR);
-			$stmt->bindParam(':user_id', authenticate_user(), PDO::PARAM_INT);
+			$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 			$stmt->bindParam(':date_offer', date_create()->format('Y-m-d H:i:s'), PDO::PARAM_STR);
 			$stmt->bindParam(':time_when_ready', $_POST['time_when_ready'], PDO::PARAM_STR);
 			$stmt->execute();
 
 			$result["success"] = 1;
-			$result["response"] ="WE ARE TRYING TO ADD SOMETHING : " . $stmt->queryString;
+			$result["response"] ="WE ARE TRYING TO ADD SOMETHING : " . $stmt->queryString . "user : " . $user_id;
 		}
 		catch(PDOException $e) 
 		{
 			$result["success"] = 0;
 			$result["response"] = "Echec de l\'insertion ! " . $e->getMessage();
 		}
-	} else 	$result["response"] = "fail";
+	}
 
 	echo json_encode($result);
 }
