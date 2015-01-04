@@ -17,14 +17,14 @@ switch($_POST['action']) // switch post data, protection against CSRF
 	break;
 	default :
 	$result = array();
-        $result["success"] = 0;
+	$result["success"] = 0;
 	$result["response"] = "Nothing is happening. What a disappointment.";
 	echo json_encode($result);
 	break;
 }
 
 function authenticate_user(){
-require_once(__DIR__ . '/db_connect.php');
+	require_once(__DIR__ . '/db_connect.php');
 	$result = array();
 	$result["success"] = 0;
 	$result["response"] = "Failed to authenticate";
@@ -40,20 +40,20 @@ require_once(__DIR__ . '/db_connect.php');
 			$stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
 			$stmt->bindParam(':password', $_POST['password'], PDO::PARAM_STR);
 			$stmt->execute();
-	                $data = $stmt->fetch();
+			$data = $stmt->fetch();
 			if (!empty($data))
 				$result["success"] = 1;
 			else
 				$result["success"] = 0;
 			$result["response"] ="WE ARE TRYING TO CONNECT : " . $stmt->queryString;
-               }
-               catch(PDOException $e) 
-               {
-		$result["success"] = 0;
-               	$result["response"] = "Echec de l\'insertion ! " . $e->getMessage();
-               }
+		}
+		catch(PDOException $e) 
+		{
+			$result["success"] = 0;
+			$result["response"] = "Echec de l\'insertion ! " . $e->getMessage();
+		}
 	}
-         echo json_encode($result);
+	echo json_encode($result);
 
 }
 
@@ -91,18 +91,18 @@ function add_spot(){
 			$stmt->bindParam(':date_offer', date_create()->format('Y-m-d H:i:s'), PDO::PARAM_STR);
 			$stmt->bindParam(':time_when_ready', $_POST['time_when_ready'], PDO::PARAM_STR);
 			$stmt->execute();
-        		
+			
 			$result["success"] = 1;
 			$result["response"] ="WE ARE TRYING TO ADD SOMETHING : " . $stmt->queryString;
-               }
-               catch(PDOException $e) 
-               {
-		$result["success"] = 0;
-               	$result["response"] = "Echec de l\'insertion ! " . $e->getMessage();
-               }
+		}
+		catch(PDOException $e) 
+		{
+			$result["success"] = 0;
+			$result["response"] = "Echec de l\'insertion ! " . $e->getMessage();
+		}
 	}
-         echo json_encode($result);
-       }
+	echo json_encode($result);
+}
 
 
-       ?>
+?>
