@@ -1,4 +1,5 @@
 <?php
+if(isValidRequest(array('action'))){
 switch($_POST['action']) // switch post data, protection against CSRF
 {
 	case "AUTHENTICATE":
@@ -21,6 +22,7 @@ switch($_POST['action']) // switch post data, protection against CSRF
 	$result["response"] = "Nothing is happening. What a disappointment.";
 	echo json_encode($result);
 	break;
+}
 }
 
 function authenticate_user(){
