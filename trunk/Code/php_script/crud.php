@@ -54,7 +54,7 @@ function authenticate_user(){
 		}
 	}
 	echo json_encode($result);
-
+	return $data;
 }
 
 
@@ -75,7 +75,7 @@ function add_spot(){
 	$result = array();
 	$result["success"] = 0;
 	$result["response"] = "Nothing happened yet.";
-	if(isValidRequest(array('lat', 'lng', 'user_id', 'time_when_ready')))
+	if(isValidRequest(array('lat', 'lng', 'email', 'password', 'time_when_ready')))
 	{
 		try
 		{
@@ -87,11 +87,11 @@ function add_spot(){
 			/*** bind les variables au statement pour s'assurer des entrées ***/
 			$stmt->bindParam(':lat', $_POST['lat'], PDO::PARAM_STR);
 			$stmt->bindParam(':lng', $_POST['lng'], PDO::PARAM_STR);
-			$stmt->bindParam(':user_id', $_POST['user_id'], PDO::PARAM_INT);
+			$stmt->bindParam(':user_id', authenticate_user(), PDO::PARAM_INT);
 			$stmt->bindParam(':date_offer', date_create()->format('Y-m-d H:i:s'), PDO::PARAM_STR);
 			$stmt->bindParam(':time_when_ready', $_POST['time_when_ready'], PDO::PARAM_STR);
 			$stmt->execute();
-			
+
 			$result["success"] = 1;
 			$result["response"] ="WE ARE TRYING TO ADD SOMETHING : " . $stmt->queryString;
 		}
@@ -104,5 +104,6 @@ function add_spot(){
 	echo json_encode($result);
 }
 
+}
 
 ?>
