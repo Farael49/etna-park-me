@@ -104,6 +104,5 @@ function add_spot(){
 	echo json_encode($result);
 }
 
-}
 
 ?>
