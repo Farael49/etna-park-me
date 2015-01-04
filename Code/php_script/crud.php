@@ -56,7 +56,7 @@ function authenticate_user(){
 		}
 	}
 	echo json_encode($result);
-	return $data;
+	return $data[0];
 }
 
 
