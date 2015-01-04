@@ -63,10 +63,17 @@ function authenticate_user(){
 //DRY solution to avoid multiple isset/empty 
 function isValidRequest($keys)
 {
+	$result = array();
+	$result["success"] = 0;
+	$result["response"] = "Failed to authenticate";
 	foreach($keys as $key)
 	{
 		if(!isset($_POST[$key]) || empty($_POST[$key]))
+		{
+			$result["response"] = $key;
+		echo json_encode($result);
 			return FALSE;
+		}
 	}
 	return TRUE;
 }
@@ -102,7 +109,8 @@ function add_spot(){
 			$result["success"] = 0;
 			$result["response"] = "Echec de l\'insertion ! " . $e->getMessage();
 		}
-	}
+	} else 	$result["response"] = "fail";
+
 	echo json_encode($result);
 }
 
