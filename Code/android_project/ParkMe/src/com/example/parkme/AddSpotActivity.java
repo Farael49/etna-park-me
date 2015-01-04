@@ -2,6 +2,8 @@ package com.example.parkme;
 
 import java.util.Calendar;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
@@ -156,9 +158,20 @@ public class AddSpotActivity extends FragmentActivity {
 			Float lat = Float.valueOf(args[0]);
 			Float lng = Float.valueOf(args[1]);
 			int time = Integer.valueOf(args[2]);
-
+			String password = null;
+			AccountManager accountManager = AccountManager
+					.get(getApplicationContext());
+			Account[] accounts = accountManager
+					.getAccountsByType("com.example.parkme");
+			for (Account account : accounts){
+				if (account.name.equals(User.getInstance().getEmail())){
+					password = accountManager.getPassword(account);
+					break;
+				}
+			}
+			
 			if (User.getInstance().isAuthenticated()) {
-				boolean isRequestDone = ServerRequests.addSpot(lat, lng, time);
+				boolean isRequestDone = ServerRequests.addSpot(lat, lng, time, User.getInstance().getEmail(), password );
 				if (!isRequestDone)
 					actionStatus = "An error occured";
 				else

@@ -6,9 +6,9 @@ import java.util.List;
  * Created by Christophe on 16/12/2014.
  */
 public class User {
-	private String email; // Used as an ID, not PID
+	private String email; // Used as an ID, not PID (?)
 	private static User instance;
-	private boolean isAuthenticated;
+	private boolean isAuthenticated; //not safe
 
 	public String getEmail() {
 		return email;
@@ -54,6 +54,15 @@ public class User {
 	}
 
 	public void setAuthenticated(boolean isAuthenticated) {
+		if (isAuthenticated == false)
+			destroyUserInstance();
 		this.isAuthenticated = isAuthenticated;
+	}
+
+	/**
+	 * temporary method used to be sure the user cant do anything when the authentication failed
+	 */
+	private void destroyUserInstance() {
+		User.instance = null;			
 	}
 }
