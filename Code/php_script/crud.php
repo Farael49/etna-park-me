@@ -169,6 +169,7 @@ function get_spots(){
 			$stmt->execute();
 			// check for empty result
 			$rows = $stmt->fetchAll();
+			$result["nbrows"] = count($rows);
 			if (count($rows) > 0) {
     // looping through all results
     // spot node
