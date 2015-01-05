@@ -173,7 +173,6 @@ function get_spots(){
 					$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
 					$stmt->bindParam(':radius', $_POST['radius'], PDO::PARAM_STR);
 					$stmt->execute();
-					$stmt->store_result();
 					$rows = $stmt->num_rows;
 					$result["nb_rows"] = $rows;
 			// check for empty result
