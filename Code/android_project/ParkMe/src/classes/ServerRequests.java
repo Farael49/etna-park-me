@@ -25,26 +25,21 @@ public class ServerRequests {
 
 	private static final String ADD_SPOT = "OFFER_SPOT";
 	private static final String AUTHENTICATE = "AUTHENTICATE";
+	private static final String REGISTER = "REGISTER";
 	private static final String SUCCESS_TAG = "success";
 	private static final String RESULT_TAG = "result";
 	private static final int WRONG_ID = -1;
 	private static final String URL_CRUD_SCRIPT = "http://107.170.145.214/android_connect/php_script/crud.php";
-	
-	/** TODO 
-	 * php script still not updated
-	 * must add : 
-	 * creating account
-	 * updating/removing spot
-	 * add constraints to the database */
-	public static boolean createAccount(String email, String password){
+
+	/**
+	 * TODO php script still not updated must add : creating account
+	 * updating/removing spot add constraints to the database
+	 */
+	public static boolean updateSpot(String email) {
 		return false;
 	}
-	
-	public static boolean updateSpot(String email){
-		return false;
-	}
-	
-	public static boolean removeSpot(String email){
+
+	public static boolean removeSpot(String email) {
 		return false;
 	}
 
@@ -53,7 +48,7 @@ public class ServerRequests {
 		nameValuePairs.add(new BasicNameValuePair("action", AUTHENTICATE));
 		nameValuePairs.add(new BasicNameValuePair("email", email));
 		nameValuePairs.add(new BasicNameValuePair("password", cryptedPwd));
-		
+
 		// parse json data
 		try {
 			JSONObject jObject = doPhpAction(nameValuePairs);
@@ -74,11 +69,15 @@ public class ServerRequests {
 	 * @param lat
 	 * @param lng
 	 * @param time_rdy
-	 * @param username is the user's email
-	 * @param password_am is the password stored in the account manager of Android and found with the actual email used as username
+	 * @param username
+	 *            is the user's email
+	 * @param password_am
+	 *            is the password stored in the account manager of Android and
+	 *            found with the actual email used as username
 	 * @return
 	 */
-	public static boolean addSpot(float lat, float lng, int time_rdy, String username, String password_am) {
+	public static boolean addSpot(float lat, float lng, int time_rdy,
+			String username, String password_am) {
 		boolean success = false;
 		String result = "";
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
@@ -107,12 +106,28 @@ public class ServerRequests {
 
 	}
 
-	private static int getUserId(String username, String password){
+	public static boolean registerUser(String username, String password) {
+		boolean success = false;
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("action", REGISTER));
+		nameValuePairs.add(new BasicNameValuePair("email", username));
+		nameValuePairs.add(new BasicNameValuePair("password", password));
+		try {
+			JSONObject jObject = doPhpAction(nameValuePairs);
+			if (jObject.getInt(RESULT_TAG) == 1)
+				success = true;
+		} catch (JSONException e) {
+			Log.e("log_tag", "Error parsing data " + e.toString());
+		}
+		return success;
+	}
+
+	private static int getUserId(String username, String password) {
 		int result = WRONG_ID;
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("action", AUTHENTICATE));
 		nameValuePairs.add(new BasicNameValuePair("email", username));
-		nameValuePairs.add(new BasicNameValuePair("password", password));	
+		nameValuePairs.add(new BasicNameValuePair("password", password));
 		doPhpAction(nameValuePairs);
 		try {
 			JSONObject jObject = doPhpAction(nameValuePairs);
@@ -121,11 +136,10 @@ public class ServerRequests {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 		return result;
+	}
 
-		}
-	
-	
-	private static JSONObject doPhpAction(ArrayList<NameValuePair> nameValuePairs){
+	private static JSONObject doPhpAction(
+			ArrayList<NameValuePair> nameValuePairs) {
 		String result = "";
 		InputStream is = null;
 		// http post
