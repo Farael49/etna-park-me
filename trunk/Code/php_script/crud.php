@@ -167,7 +167,7 @@ function get_spots(){
 		// utilisation d'un PDO avec prepare / execute pour l'Insertion
 					$stmt = $auth->prepare(
 						"Select count(*) from parking_spot where 
-			((parking_spot.lat - 42.2)^2 + (parking_spot.lng - 2.2)^2 < 1000^2);", array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
+						((parking_spot.lat - 42.2)^2 + (parking_spot.lng - 2.2)^2 < 1000^2);", array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
 					/*** bind les variables au statement pour s'assurer des entrées ***/
 					$stmt->bindParam(':user_lat', $_POST['user_lat'], PDO::PARAM_STR);
 					$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
@@ -197,12 +197,13 @@ function get_spots(){
 					}
 				}
 			}
-			catch(PDOException $e) 
-			{
-				$result["success"] = 0;
-				$result["response"] = "Echec de la recherche ! " . $e->getMessage();
-			}
 		}
-		echo json_encode($result);
+		catch(PDOException $e) 
+		{
+			$result["success"] = 0;
+			$result["response"] = "Echec de la recherche ! " . $e->getMessage();
+		}
 	}
-	?>
+	echo json_encode($result);
+}
+?>
