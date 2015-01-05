@@ -167,12 +167,11 @@ function get_spots(){
 			$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
 			$stmt->bindParam(':radius', $_POST['radius'], PDO::PARAM_STR);
 			$stmt->execute();
+			$stmt->store_result();
+			$rows = $stmt->num_rows;
+			$result["nb_rows"] = $rows;
 			// check for empty result
-			$rows = $stmt->fetchAll();
-			$result["nbrows"] = count($rows);
-			if (count($rows) > 0) {
-    // looping through all results
-    // spot node
+			if ($rows > 0) {
 				$result["spots"] = array();
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         // temp spot array
