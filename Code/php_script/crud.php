@@ -158,16 +158,16 @@ function get_spots(){
 		try
 		{
 			$auth = dbconnexion();
-			$sql = "Select count(*) from parking_spot where 
-			((parking_spot.lat - 42.2)^2 + (parking_spot.lng - 2.2)^2 < 1000^2);";
+			$sql = "Select count(*) from parking_spot;";/* where 
+			((parking_spot.lat - 42.2)^2 + (parking_spot.lng - 2.2)^2 < 1000^2);";*/
 			if ($res = $auth->query($sql)) {
 
 				/* Récupère le nombre de lignes qui correspond à la requête SELECT */
 				if ($res->fetchColumn() > 0) {
 		// utilisation d'un PDO avec prepare / execute pour l'Insertion
 					$stmt = $auth->prepare(
-						"Select * from parking_spot where 
-						((parking_spot.lat - 42.2)^2 + (parking_spot.lng - 2.2)^2 < 1000^2);", array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
+						"Select * from parking_spot;"/* where 
+						((parking_spot.lat - 42.2)^2 + (parking_spot.lng - 2.2)^2 < 1000^2);"*/, array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
 					/*** bind les variables au statement pour s'assurer des entrées ***/
 					/*$stmt->bindParam(':user_lat', $_POST['user_lat'], PDO::PARAM_STR);
 					$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
@@ -180,6 +180,7 @@ function get_spots(){
 						$spot = array();
 						$spot["lat"] = $row["lat"];
 						$spot["lng"] = $row["lng"];
+						/*$spot["id"] = $row["id"];*/
         // push single spot into final response array
 						array_push($result["spots"], $spot);
 					}
