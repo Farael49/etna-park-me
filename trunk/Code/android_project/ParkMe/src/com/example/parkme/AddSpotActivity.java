@@ -7,6 +7,7 @@ import android.accounts.AccountManager;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -188,7 +189,11 @@ public class AddSpotActivity extends FragmentActivity {
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once done
 			pDialog.dismiss();
-			Utils.showToastText(getApplicationContext(), actionStatus);
+			//Utils.showToastText(getApplicationContext(), actionStatus);
+			if (User.getInstance().isAuthenticated()) {
+				Intent i = new Intent(AddSpotActivity.this, MapActivity.class);
+				startActivity(i);
+			}
 		}
 
 	}
