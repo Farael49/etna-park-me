@@ -16,6 +16,9 @@ switch($_POST['action']) // switch post data, protection against CSRF
 	case "REMOVE_SPOT" :
 	remove_spot();
 	break;
+	case "REGISTER" :
+	register_user();
+	break;
 	default :
 	$result = array();
 	$result["success"] = 0;
@@ -29,7 +32,7 @@ function authenticate_user(){
 	require_once(__DIR__ . '/db_connect.php');
 	$result = array();
 	$result["success"] = 0;
-	$result["response"] = "Failed to authenticate";
+	$result["response"] = "HTTP Request failed : lacking data";
 	if(isValidRequest(array('email', 'password')))
 	{
 		try
@@ -47,7 +50,7 @@ function authenticate_user(){
 				$result["success"] = 1;
 			else
 				$result["success"] = 0;
-			$result["response"] ="WE ARE TRYING TO CONNECT : " . $stmt->queryString;
+			$result["response"] ="Trying to connect : " . $_POST['email'] . " request : " . $stmt->queryString;
 		}
 		catch(PDOException $e) 
 		{
@@ -63,17 +66,10 @@ function authenticate_user(){
 //DRY solution to avoid multiple isset/empty 
 function isValidRequest($keys)
 {
-	$result = array();
-	$result["success"] = 0;
-	$result["response"] = "Failed to authenticate";
 	foreach($keys as $key)
 	{
 		if(!isset($_POST[$key]) || empty($_POST[$key]))
-		{
-			$result["response"] = $key;
-		echo json_encode($result);
 			return FALSE;
-		}
 	}
 	return TRUE;
 }
@@ -83,7 +79,7 @@ function add_spot(){
 	require_once(__DIR__ . '/db_connect.php');
 	$result = array();
 	$result["success"] = 0;
-	$result["response"] = "Nothing happened yet.";
+	$result["response"] = "HTTP Request failed : lacking data";
 	if(isValidRequest(array('lat', 'lng', 'email', 'password', 'time_when_ready')))
 	{
 		try
@@ -103,7 +99,7 @@ function add_spot(){
 			$stmt->execute();
 
 			$result["success"] = 1;
-			$result["response"] ="WE ARE TRYING TO ADD SOMETHING : " . $stmt->queryString . "user : " . $user_id;
+			$result["response"] ="Spot added at " . $_POST['lat'] . " lat, " . $_POST['lng'] . " lng for user " . $_POST['email'];
 		}
 		catch(PDOException $e) 
 		{
@@ -111,9 +107,38 @@ function add_spot(){
 			$result["response"] = "Echec de l\'insertion ! " . $e->getMessage();
 		}
 	}
-
 	echo json_encode($result);
 }
 
+/*Inscription d'un utilisateur*/
+function register_user(){
+	require_once(__DIR__ . '/db_connect.php');
+	$result = array();
+	$result["success"] = 0;
+	$result["response"] = "HTTP Request failed : lacking data";
+	if(isValidRequest(array('email', 'password')))
+	{
+		try
+		{
+		// utilisation d'un PDO avec prepare / execute pour l'Insertion
+			$auth = dbconnexion();
+			$stmt = $auth->prepare(
+				'INSERT INTO user (mail, crypted_pwd) VALUES (:email, :pwd);');
+			/*** bind les variables au statement pour s'assurer des entrées ***/
+			$stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
+			$stmt->bindParam(':pwd', $_POST['password'], PDO::PARAM_STR);
+			$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+			$stmt->execute();
+			$result["success"] = 1;
+			$result["response"] = "Registered " . $_POST['email'];
+		}
+		catch(PDOException $e) 
+		{
+			$result["success"] = 0;
+			$result["response"] = "Echec de l\'inscription ! " . $e->getMessage();
+		}
+	}
+	echo json_encode($result);
+}
 
 ?>
