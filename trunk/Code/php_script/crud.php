@@ -189,5 +189,5 @@ function get_spots(){
 		}
 		echo json_encode($result);
 	}
-
+}
 	?>
