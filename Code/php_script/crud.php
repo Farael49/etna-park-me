@@ -166,12 +166,12 @@ function get_spots(){
 				if ($res->fetchColumn() > 0) {
 		// utilisation d'un PDO avec prepare / execute pour l'Insertion
 					$stmt = $auth->prepare(
-						"Select count(*) from parking_spot where 
+						"Select * from parking_spot where 
 						((parking_spot.lat - 42.2)^2 + (parking_spot.lng - 2.2)^2 < 1000^2);", array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
 					/*** bind les variables au statement pour s'assurer des entrées ***/
-					$stmt->bindParam(':user_lat', $_POST['user_lat'], PDO::PARAM_STR);
+					/*$stmt->bindParam(':user_lat', $_POST['user_lat'], PDO::PARAM_STR);
 					$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
-					$stmt->bindParam(':radius', $_POST['radius'], PDO::PARAM_STR);
+					$stmt->bindParam(':radius', $_POST['radius'], PDO::PARAM_STR);*/
 					$stmt->execute();
 					$result["nb_rows"] = $res->fetchColumn();
 					$result["spots"] = array();
