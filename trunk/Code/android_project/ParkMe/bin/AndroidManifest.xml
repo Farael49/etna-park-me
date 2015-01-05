@@ -23,9 +23,15 @@
             </intent-filter>
 
             <meta-data
+                android:name="com.google.android.maps.v2.API_KEY"
+                android:value="API_KEY" />
+            <meta-data
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" >
             </meta-data>
+            <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
         </service>
 
         <activity
