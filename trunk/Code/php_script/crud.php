@@ -168,7 +168,8 @@ function get_spots(){
 			$stmt->bindParam(':radius', $_POST['radius'], PDO::PARAM_STR);
 			$stmt->execute();
 			// check for empty result
-			if ($stmt->rowCount() > 0) {
+			$rows = $stmt->fetchAll();
+			if (count($rows) > 0) {
     // looping through all results
     // spot node
 				$result["spots"] = array();
