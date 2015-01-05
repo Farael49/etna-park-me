@@ -36,7 +36,7 @@ function authenticate_user(){
 	$user_id = -1;
 	if(isValidRequest(array('email', 'password')))
 	{
-		$result["response"] ="Trying to connect : " . $_POST['email'] . " request : " . $stmt->queryString;
+		$result["response"] ="Trying to connect : " . $_POST['email'];
 		try
 		{
 		// utilisation d'un PDO avec prepare / execute pour l'Insertion
