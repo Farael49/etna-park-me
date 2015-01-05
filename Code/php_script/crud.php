@@ -33,8 +33,10 @@ function authenticate_user(){
 	$result = array();
 	$result["success"] = 0;
 	$result["response"] = "HTTP Request failed : lacking data";
+	$user_id = -1;
 	if(isValidRequest(array('email', 'password')))
 	{
+		$result["response"] ="Trying to connect : " . $_POST['email'] . " request : " . $stmt->queryString;
 		try
 		{
 		// utilisation d'un PDO avec prepare / execute pour l'Insertion
@@ -46,11 +48,12 @@ function authenticate_user(){
 			$stmt->bindParam(':password', $_POST['password'], PDO::PARAM_STR);
 			$stmt->execute();
 			$data = $stmt->fetch();
-			if (!empty($data))
+			if (!empty($data)){
 				$result["success"] = 1;
+				$user_id = $data[0];
+			}
 			else
 				$result["success"] = 0;
-			$result["response"] ="Trying to connect : " . $_POST['email'] . " request : " . $stmt->queryString;
 		}
 		catch(PDOException $e) 
 		{
@@ -59,7 +62,7 @@ function authenticate_user(){
 		}
 	}
 	echo json_encode($result);
-	return $data[0];
+	return $user_id;
 }
 
 
@@ -127,7 +130,6 @@ function register_user(){
 			/*** bind les variables au statement pour s'assurer des entrées ***/
 			$stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
 			$stmt->bindParam(':pwd', $_POST['password'], PDO::PARAM_STR);
-			$stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 			$stmt->execute();
 			$result["success"] = 1;
 			$result["response"] = "Registered " . $_POST['email'];
