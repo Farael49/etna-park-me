@@ -158,7 +158,7 @@ function get_spots(){
 			$auth = dbconnexion();
 			$stmt = $auth->prepare(
 				'Select * from parking_spot where 
-				(parking_spot.lat - :user_lat)^2 + (parking_spot.lng - :user_lng)^2 < :radius^2');
+				(parking_spot.lat - '.$_POST['user_lat'].')^2 + (parking_spot.lng - '.$_POST['user_lng'].')^2 < '.$_POST['radius'].'^2');
 			/*** bind les variables au statement pour s'assurer des entrées ***/
 			$stmt->bindParam(':user_lat', $_POST['user_lat'], PDO::PARAM_STR);
 			$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
