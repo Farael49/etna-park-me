@@ -148,6 +148,8 @@ function register_user(){
 
 function get_spots(){
 	require_once(__DIR__ . '/db_connect.php');
+	$result = array();
+	$result["response"] = "Nothing yet";
 	if(isValidRequest(array('user_lat', 'user_lng', 'radius')))
 	{
 		try
@@ -190,7 +192,7 @@ function get_spots(){
 			$result["success"] = 0;
 			$result["response"] = "Echec de la recherche ! " . $e->getMessage();
 		}
-		echo json_encode($result);
 	}
+	echo json_encode($result);
 }
-	?>
+?>
