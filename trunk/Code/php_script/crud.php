@@ -180,7 +180,7 @@ function get_spots(){
 						$spot = array();
 						$spot["lat"] = $row["lat"];
 						$spot["lng"] = $row["lng"];
-						/*$spot["id"] = $row["id"];*/
+						$spot["id"] = $row["id"];
         // push single spot into final response array
 						array_push($result["spots"], $spot);
 					}
