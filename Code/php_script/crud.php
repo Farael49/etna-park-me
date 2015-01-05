@@ -173,26 +173,22 @@ function get_spots(){
 					$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
 					$stmt->bindParam(':radius', $_POST['radius'], PDO::PARAM_STR);
 					$stmt->execute();
-					$result["nb_rows"] = $res;
-			// check for empty result
-					if ($res > 0) {  
-						$result["spots"] = array();
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+					$result["nb_rows"] = $res->fetchColumn();
+					$result["spots"] = array();
+					while ($row = $stmt->fetch(PDO::FETCH_BOTH)) {
         // temp spot array
-							$spot = array();
-							$spot["lat"] = $row["lat"];
-							$spot["lng"] = $row["lng"];
+						$spot = array();
+						$spot["lat"] = $row["lat"];
+						$spot["lng"] = $row["lng"];
         // push single spot into final response array
-							array_push($result["spots"], $spot);
-						}
-    // success
-						$result["success"] = 1;
-
-					} else {
-    // no products found
-						$result["success"] = 0;
-						$result["response"] = "No spots found";	
+						array_push($result["spots"], $spot);
 					}
+    // success
+					$result["success"] = 1;
+				} else {
+    // no products found
+					$result["success"] = 0;
+					$result["response"] = "No spots found";	
 				}
 			}
 		}
