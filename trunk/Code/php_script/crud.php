@@ -143,4 +143,51 @@ function register_user(){
 	echo json_encode($result);
 }
 
-?>
+function get_spots(){
+	require_once(__DIR__ . '/db_connect.php');
+	if(isValidRequest(array('user_lat', 'user_lng', 'radius')))
+	{
+		try
+		{
+		// utilisation d'un PDO avec prepare / execute pour l'Insertion
+			$auth = dbconnexion();
+			$stmt = $auth->prepare(
+				'Select * from parking_spot where 
+				(parking_spot.lat - :user_lat)^2 + (parking_spot.lng - :user_lng)^2 < :radius^2');
+			/*** bind les variables au statement pour s'assurer des entrées ***/
+			$stmt->bindParam(':user_lat', $_POST['user_lat'], PDO::PARAM_STR);
+			$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
+			$stmt->bindParam(':radius', $_POST['radius'], PDO::PARAM_STR);
+			$stmt->execute();
+			$data = $stmt->fetch();
+			// check for empty result
+			if (mysql_num_rows($data) > 0) {
+    // looping through all results
+    // spot node
+				$result["spots"] = array();
+				while ($row = mysql_fetch_array($data)) {
+        // temp spot array
+					$spot = array();
+					$spot["lat"] = $row["lat"];
+					$spot["lng"] = $row["lng"];
+        // push single spot into final response array
+					array_push($result["spots"], $spot);
+				}
+    // success
+				$result["success"] = 1;
+
+			} else {
+    // no products found
+				$result["success"] = 0;
+				$result["response"] = "No spots found";	
+			}
+		}
+		catch(PDOException $e) 
+		{
+			$result["success"] = 0;
+			$result["response"] = "Echec de la recherche ! " . $e->getMessage();
+		}
+		echo json_encode($result);
+	}
+
+	?>
