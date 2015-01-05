@@ -18,9 +18,9 @@ import classes.User;
 import classes.Utils;
 
 public class MainActivity extends Activity {
-	Button btnLogin;
+	Button btnLogin, btnRegister;
 	TextView tvEmail, tvPwd;
-
+	int MIN_PWD_LENGTH, MIN_MAIL_LENGTH = 5;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 		new SignInWithAccountManager().execute();
 		// Buttons
 		btnLogin = (Button) findViewById(R.id.btnLogin);
+		btnRegister = (Button) findViewById(R.id.btnRegister);
 		tvEmail = (TextView) findViewById(R.id.email);
 		tvPwd = (TextView) findViewById(R.id.password);
 
@@ -43,11 +44,30 @@ public class MainActivity extends Activity {
 				 */
 				String email = tvEmail.getText().toString();
 				String pwd = tvPwd.getText().toString();
-				if (email.length() > 3 && pwd.length() > 3)
+				if (email.length() > MIN_MAIL_LENGTH && pwd.length() > MIN_PWD_LENGTH)
 					new SignInManual().execute(email, pwd);
 				else
 					Utils.showToastText(getApplicationContext(),
 							"Renseignez correctement vos identifiants.");
+			}
+		});
+		
+		// login click event
+		btnRegister.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View view) {
+				/*
+				 * Intent i = new Intent(getApplicationContext(),
+				 * NewSpotActivity.class); startActivity(i);
+				 */
+				String email = tvEmail.getText().toString();
+				String pwd = tvPwd.getText().toString();
+				if (email.length() > MIN_MAIL_LENGTH && pwd.length() > MIN_PWD_LENGTH)
+					new RegisterUser().execute(email, pwd);
+				else
+					Utils.showToastText(getApplicationContext(),
+							"Vos identifiants sont trop courts.");
 			}
 		});
 	}
@@ -182,6 +202,59 @@ public class MainActivity extends Activity {
 			} else {
 				Utils.showToastText(getApplicationContext(), "Please enter your credentials");
 			}
+		}
+	}
+	
+	/**
+	 * Background Async Task to sign in
+	 * */
+	class RegisterUser extends AsyncTask<String, String, String> {
+		private ProgressDialog pDialog;
+
+		/**
+		 * Before starting background thread Show Progress Dialog
+		 * */
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			pDialog = new ProgressDialog(MainActivity.this);
+			pDialog.setMessage("Registering ...");
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			pDialog.show();
+		}
+
+		protected String doInBackground(String... args) {
+			String email = args[0];
+			String password = args[1];
+
+			ServerRequests.registerUser(email, password);
+			if (ServerRequests.authenticate(email, password)) {
+				AccountManager accountManager = AccountManager
+						.get(getApplicationContext());
+				Account account = new Account(email, "com.example.parkme");
+				accountManager.addAccountExplicitly(account, password, null);
+				/*
+				 * if (User.isAuthenticated) ServerRequests.addSpot(15.5f,
+				 * 25.2f, 150, User.getInstance(args[0])); else {
+				 */
+			}
+
+			return email;
+		}
+
+		/**
+		 * After completing background task Dismiss the progress dialog
+		 * **/
+		protected void onPostExecute(String email) {
+			// dismiss the dialog once done
+			pDialog.dismiss();
+			if (User.getInstance().isAuthenticated()) {
+				// new SignInWithAccountManager().execute();
+				Intent i = new Intent(MainActivity.this, AddSpotActivity.class);
+				startActivity(i);
+			}else
+				Utils.showToastText(getApplicationContext(), "An error occured while adding the account " + email);
 		}
 
 	}
