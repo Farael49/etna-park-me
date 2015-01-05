@@ -51,6 +51,7 @@ function authenticate_user(){
 			$stmt->bindParam(':password', $_POST['password'], PDO::PARAM_STR);
 			$stmt->execute();
 			$data = $stmt->fetch();
+			$stmt->closeCursor();
 			if (!empty($data)){
 				$result["success"] = 1;
 				$user_id = $data[0];
@@ -103,7 +104,7 @@ function add_spot(){
 			$stmt->bindParam(':date_offer', date_create()->format('Y-m-d H:i:s'), PDO::PARAM_STR);
 			$stmt->bindParam(':time_when_ready', $_POST['time_when_ready'], PDO::PARAM_STR);
 			$stmt->execute();
-
+			$stmt->closeCursor();
 			$result["success"] = 1;
 			$result["response"] ="Spot added at " . $_POST['lat'] . " lat, " . $_POST['lng'] . " lng for user " . $_POST['email'];
 		}
@@ -134,6 +135,8 @@ function register_user(){
 			$stmt->bindParam(':email', $_POST['email'], PDO::PARAM_STR);
 			$stmt->bindParam(':pwd', $_POST['password'], PDO::PARAM_STR);
 			$stmt->execute();
+			$stmt->closeCursor();
+
 			$result["success"] = 1;
 			$result["response"] = "Registered " . $_POST['email'];
 		}
