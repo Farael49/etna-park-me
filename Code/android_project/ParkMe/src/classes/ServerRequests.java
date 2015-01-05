@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -13,6 +14,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,6 +28,7 @@ public class ServerRequests {
 	private static final String ADD_SPOT = "OFFER_SPOT";
 	private static final String AUTHENTICATE = "AUTHENTICATE";
 	private static final String REGISTER = "REGISTER";
+	private static final String GET_ALL_SPOTS = "GET_ALL_SPOTS";
 	private static final String SUCCESS_TAG = "success";
 	private static final String RESULT_TAG = "result";
 	private static final int WRONG_ID = -1;
@@ -41,6 +44,54 @@ public class ServerRequests {
 
 	public static boolean removeSpot(String email) {
 		return false;
+	}
+
+	public static ArrayList<HashMap<String, Float>> getAllSpots(Float lat,
+			Float lng, int radius) {
+		ArrayList<HashMap<String, Float>> results = new ArrayList<HashMap<String, Float>>();
+		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("action", GET_ALL_SPOTS));
+		nameValuePairs.add(new BasicNameValuePair("user_lat", Float
+				.toString(lat)));
+		nameValuePairs.add(new BasicNameValuePair("user_lng", Float
+				.toString(lng)));
+		nameValuePairs.add(new BasicNameValuePair("radius", Integer
+				.toString(radius)));
+
+		// parse json data
+		try {
+			JSONObject jObject = doPhpAction(nameValuePairs);
+			if (jObject.getInt(SUCCESS_TAG) == 1) {
+				// products found
+				// Getting Array of spots
+				JSONArray spots = jObject.getJSONArray("spots");
+
+				// looping through All Products
+				for (int i = 0; i < spots.length(); i++) {
+					JSONObject c = spots.getJSONObject(i);
+
+					// Storing each json item in variable
+					Float tmp_lat = Float.valueOf(c.getString("lat"));
+					Float tmp_lng = Float.valueOf(c.getString("lng"));
+
+					// creating new HashMap
+					HashMap<String, Float> map = new HashMap<String, Float>();
+
+					// adding each child node to HashMap key => value
+					map.put("user_lat", tmp_lat);
+					map.put("user_lng", tmp_lng);
+
+
+					// adding HashList to ArrayList
+					results.add(map);
+				}
+			}
+		} catch (JSONException e) {
+			Log.e("log_tag", "Error parsing data " + e.toString());
+			User.getInstance().setAuthenticated(false);
+
+		}
+		return results;
 	}
 
 	public static boolean authenticate(String email, String cryptedPwd) {
