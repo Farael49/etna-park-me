@@ -19,6 +19,9 @@ switch($_POST['action']) // switch post data, protection against CSRF
 	case "REGISTER" :
 	register_user();
 	break;
+	case "GET_ALL_SPOTS" :
+	get_spots();
+	break;
 	default :
 	$result = array();
 	$result["success"] = 0;
