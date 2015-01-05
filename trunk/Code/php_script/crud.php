@@ -157,45 +157,52 @@ function get_spots(){
 	{
 		try
 		{
-		// utilisation d'un PDO avec prepare / execute pour l'Insertion
 			$auth = dbconnexion();
-			$stmt = $auth->prepare(
-				'Select * from parking_spot where 
-				((parking_spot.lat - :user_lat)^2 + (parking_spot.lng - :user_lng)^2 < :radius^2);', array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
-			/*** bind les variables au statement pour s'assurer des entrées ***/
-			$stmt->bindParam(':user_lat', $_POST['user_lat'], PDO::PARAM_STR);
-			$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
-			$stmt->bindParam(':radius', $_POST['radius'], PDO::PARAM_STR);
-			$stmt->execute();
-			$stmt->store_result();
-			$rows = $stmt->num_rows;
-			$result["nb_rows"] = $rows;
-			// check for empty result
-			if ($rows > 0) {
-				$result["spots"] = array();
-				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // temp spot array
-					$spot = array();
-					$spot["lat"] = $row["lat"];
-					$spot["lng"] = $row["lng"];
-        // push single spot into final response array
-					array_push($result["spots"], $spot);
-				}
-    // success
-				$result["success"] = 1;
+			$sql = "Select count(*) from parking_spot where 
+			((parking_spot.lat - 42.2)^2 + (parking_spot.lng - 2.2)^2 < 1000^2);";
+			if ($res = $auth->query($sql)) {
 
-			} else {
+				/* Récupère le nombre de lignes qui correspond à la requête SELECT */
+				if ($res->fetchColumn() > 0) {
+		// utilisation d'un PDO avec prepare / execute pour l'Insertion
+					$stmt = $auth->prepare(
+						"Select * from parking_spot where 
+						((parking_spot.lat - :user_lat)^2 + (parking_spot.lng - :user_lng)^2 < :radius^2);", array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true));
+					/*** bind les variables au statement pour s'assurer des entrées ***/
+					$stmt->bindParam(':user_lat', $_POST['user_lat'], PDO::PARAM_STR);
+					$stmt->bindParam(':user_lng', $_POST['user_lng'], PDO::PARAM_STR);
+					$stmt->bindParam(':radius', $_POST['radius'], PDO::PARAM_STR);
+					$stmt->execute();
+				/*	$stmt->store_result();
+					$rows = $stmt->num_rows;
+					$result["nb_rows"] = $rows;
+			// check for empty result
+					if ($rows > 0) {  */
+						$result["spots"] = array();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // temp spot array
+							$spot = array();
+							$spot["lat"] = $row["lat"];
+							$spot["lng"] = $row["lng"];
+        // push single spot into final response array
+							array_push($result["spots"], $spot);
+						}
+    // success
+						$result["success"] = 1;
+
+					} else {
     // no products found
+						$result["success"] = 0;
+						$result["response"] = "No spots found";	
+					}
+				}
+			}
+			catch(PDOException $e) 
+			{
 				$result["success"] = 0;
-				$result["response"] = "No spots found";	
+				$result["response"] = "Echec de la recherche ! " . $e->getMessage();
 			}
 		}
-		catch(PDOException $e) 
-		{
-			$result["success"] = 0;
-			$result["response"] = "Echec de la recherche ! " . $e->getMessage();
-		}
+		echo json_encode($result);
 	}
-	echo json_encode($result);
-}
-?>
+	?>
