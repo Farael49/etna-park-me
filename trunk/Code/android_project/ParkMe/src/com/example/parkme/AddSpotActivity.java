@@ -2,6 +2,9 @@ package com.example.parkme;
 
 import java.util.Calendar;
 
+import com.example.parkme.MapActivity.GetSpots;
+import com.google.android.gms.maps.model.LatLng;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.DatePickerDialog;
@@ -20,6 +23,7 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import classes.GPSTracker;
 import classes.ServerRequests;
 import classes.User;
 import classes.Utils;
@@ -110,6 +114,13 @@ public class AddSpotActivity extends FragmentActivity {
 				String lat = etLat.getText().toString();
 				String lng = etLng.getText().toString();
 				String time = String.valueOf(npTime.getValue());
+				if (lat.isEmpty() || lng.isEmpty()) {
+					GPSTracker gps = new GPSTracker(AddSpotActivity.this);
+					if (gps.canGetLocation()) {
+						lat = Double.toString(gps.getLatitude());
+						lng = Double.toString(gps.getLongitude());
+					}
+				}
 				new AddSpot().execute(lat, lng, time);
 			}
 		});
@@ -141,7 +152,6 @@ public class AddSpotActivity extends FragmentActivity {
 		private ProgressDialog pDialog;
 		private String actionStatus = "";
 
-
 		/**
 		 * Before starting background thread Show Progress Dialog
 		 * */
@@ -164,15 +174,16 @@ public class AddSpotActivity extends FragmentActivity {
 					.get(getApplicationContext());
 			Account[] accounts = accountManager
 					.getAccountsByType("com.example.parkme");
-			for (Account account : accounts){
-				if (account.name.equals(User.getInstance().getEmail())){
+			for (Account account : accounts) {
+				if (account.name.equals(User.getInstance().getEmail())) {
 					password = accountManager.getPassword(account);
 					break;
 				}
 			}
-			
+
 			if (User.getInstance().isAuthenticated()) {
-				boolean isRequestDone = ServerRequests.addSpot(lat, lng, time, User.getInstance().getEmail(), password );
+				boolean isRequestDone = ServerRequests.addSpot(lat, lng, time,
+						User.getInstance().getEmail(), password);
 				if (!isRequestDone)
 					actionStatus = "An error occured";
 				else
@@ -189,7 +200,7 @@ public class AddSpotActivity extends FragmentActivity {
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once done
 			pDialog.dismiss();
-			//Utils.showToastText(getApplicationContext(), actionStatus);
+			// Utils.showToastText(getApplicationContext(), actionStatus);
 			if (User.getInstance().isAuthenticated()) {
 				Intent i = new Intent(AddSpotActivity.this, MapActivity.class);
 				startActivity(i);
