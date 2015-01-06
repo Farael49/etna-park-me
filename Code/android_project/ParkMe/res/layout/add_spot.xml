@@ -11,17 +11,17 @@
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:onClick="showDatePickerDialog"
-        android:text="Date"
-        android:clickable="true" />
+        android:text="Date" />
 
     <TextView
         android:id="@+id/tvTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:onClick="showTimePickerDialog"
-        android:text="Time"
-        android:clickable="true" />
+        android:text="Time" />
 
     <NumberPicker
         android:id="@+id/numberPicker"
@@ -58,5 +58,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dip"
         android:text="Submit" />
+
+    <Button
+        android:id="@+id/btnViewSpots"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dip"
+        android:text="View Spots" />
 
 </LinearLayout>

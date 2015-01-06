@@ -29,7 +29,7 @@ import classes.User;
 import classes.Utils;
 
 public class AddSpotActivity extends FragmentActivity {
-	Button btnSubmit;
+	Button btnSubmit, btnViewSpots;
 	EditText etLat, etLng;
 	TextView date, time;
 	NumberPicker npTime;
@@ -38,6 +38,70 @@ public class AddSpotActivity extends FragmentActivity {
 	public void onBackPressed() {
 		User.getInstance().setAuthenticated(false);
 		super.onBackPressed();
+	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.add_spot);
+		Utils.showToastText(this, "Bienvenue " + User.getInstance().getEmail());
+		// Buttons
+		btnSubmit = (Button) findViewById(R.id.btnSubmit);
+		etLat = (EditText) findViewById(R.id.lat);
+		etLng = (EditText) findViewById(R.id.lng);
+		npTime = (NumberPicker) findViewById(R.id.numberPicker);
+		date = (TextView) findViewById(R.id.tvDate);
+		time = (TextView) findViewById(R.id.tvTime);
+		btnViewSpots = (Button) findViewById(R.id.btnViewSpots);
+		date.setText("00/00/00");
+		time.setText("00:00");
+
+		npTime.setMaxValue(9);
+		npTime.setMinValue(0);
+		// add spot click event
+		btnSubmit.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				String lat = etLat.getText().toString();
+				String lng = etLng.getText().toString();
+				String time = String.valueOf(npTime.getValue());
+				if (lat.isEmpty() || lng.isEmpty()) {
+					GPSTracker gps = new GPSTracker(AddSpotActivity.this);
+					if (gps.canGetLocation()) {
+						lat = Double.toString(gps.getLatitude());
+						lng = Double.toString(gps.getLongitude());
+					}
+				}
+				new AddSpot().execute(lat, lng, time);
+			}
+		});
+		// login click event
+		btnViewSpots.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent i = new Intent(AddSpotActivity.this, MapActivity.class);
+				startActivity(i);
+			}
+		});
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.requests, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	// exemple d'un datePicker
@@ -53,7 +117,7 @@ public class AddSpotActivity extends FragmentActivity {
 					@Override
 					public void onDateSet(DatePicker view, int year,
 							int monthOfYear, int dayOfMonth) {
-						date.setText(dayOfMonth + "/" + monthOfYear + "/"
+						date.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/"
 								+ year);
 					}
 				}, year, month, day);
@@ -83,66 +147,6 @@ public class AddSpotActivity extends FragmentActivity {
 
 		mTimePicker.setTitle("Choisissez l'heure !");
 		mTimePicker.show();
-	}
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.add_spot);
-		Utils.showToastText(this, "Bienvenue " + User.getInstance().getEmail());
-		// Buttons
-		btnSubmit = (Button) findViewById(R.id.btnSubmit);
-		etLat = (EditText) findViewById(R.id.lat);
-		etLng = (EditText) findViewById(R.id.lng);
-		npTime = (NumberPicker) findViewById(R.id.numberPicker);
-		date = (TextView) findViewById(R.id.tvDate);
-		time = (TextView) findViewById(R.id.tvTime);
-
-		date.setText("00/00/00");
-		time.setText("00:00");
-
-		npTime.setMaxValue(9);
-		npTime.setMinValue(0);
-		// login click event
-		btnSubmit.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				/*
-				 * Intent i = new Intent(getApplicationContext(),
-				 * NewSpotActivity.class); startActivity(i);
-				 */
-				String lat = etLat.getText().toString();
-				String lng = etLng.getText().toString();
-				String time = String.valueOf(npTime.getValue());
-				if (lat.isEmpty() || lng.isEmpty()) {
-					GPSTracker gps = new GPSTracker(AddSpotActivity.this);
-					if (gps.canGetLocation()) {
-						lat = Double.toString(gps.getLatitude());
-						lng = Double.toString(gps.getLongitude());
-					}
-				}
-				new AddSpot().execute(lat, lng, time);
-			}
-		});
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.requests, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 
 	/**

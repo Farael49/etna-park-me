@@ -38,10 +38,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
-				/*
-				 * Intent i = new Intent(getApplicationContext(),
-				 * NewSpotActivity.class); startActivity(i);
-				 */
 				String email = tvEmail.getText().toString();
 				String pwd = tvPwd.getText().toString();
 				if (email.length() > MIN_MAIL_LENGTH && pwd.length() > MIN_PWD_LENGTH)
@@ -57,10 +53,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View view) {
-				/*
-				 * Intent i = new Intent(getApplicationContext(),
-				 * NewSpotActivity.class); startActivity(i);
-				 */
 				String email = tvEmail.getText().toString();
 				String pwd = tvPwd.getText().toString();
 				if (email.length() > MIN_MAIL_LENGTH && pwd.length() > MIN_PWD_LENGTH)
@@ -119,10 +111,6 @@ public class MainActivity extends Activity {
 						.get(getApplicationContext());
 				Account account = new Account(email, "com.example.parkme");
 				accountManager.addAccountExplicitly(account, password, null);
-				/*
-				 * if (User.isAuthenticated) ServerRequests.addSpot(15.5f,
-				 * 25.2f, 150, User.getInstance(args[0])); else {
-				 */
 			}
 
 			return null;
@@ -135,7 +123,6 @@ public class MainActivity extends Activity {
 			// dismiss the dialog once done
 			pDialog.dismiss();
 			if (User.getInstance().isAuthenticated()) {
-				// new SignInWithAccountManager().execute();
 				Intent i = new Intent(MainActivity.this, AddSpotActivity.class);
 				startActivity(i);
 			}
@@ -168,11 +155,6 @@ public class MainActivity extends Activity {
 				if (ServerRequests.authenticate(account.name,
 						accountManager.getPassword(account))) {
 					break;
-
-					/*
-					 * if (User.isAuthenticated) ServerRequests.addSpot(15.5f,
-					 * 25.2f, 150, User.getInstance(args[0])); else {
-					 */
 				}
 			}
 		}
@@ -234,10 +216,6 @@ public class MainActivity extends Activity {
 						.get(getApplicationContext());
 				Account account = new Account(email, "com.example.parkme");
 				accountManager.addAccountExplicitly(account, password, null);
-				/*
-				 * if (User.isAuthenticated) ServerRequests.addSpot(15.5f,
-				 * 25.2f, 150, User.getInstance(args[0])); else {
-				 */
 			}
 
 			return email;
@@ -250,7 +228,6 @@ public class MainActivity extends Activity {
 			// dismiss the dialog once done
 			pDialog.dismiss();
 			if (User.getInstance().isAuthenticated()) {
-				// new SignInWithAccountManager().execute();
 				Intent i = new Intent(MainActivity.this, AddSpotActivity.class);
 				startActivity(i);
 			}else
