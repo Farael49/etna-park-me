@@ -46,9 +46,9 @@ public class ServerRequests {
 		return false;
 	}
 
-	public static ArrayList<HashMap<String, Float>> getAllSpots(Float lat,
+	public static ArrayList<HashMap<String, String>> getAllSpots(Float lat,
 			Float lng, int radius) {
-		ArrayList<HashMap<String, Float>> results = new ArrayList<HashMap<String, Float>>();
+		ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("action", GET_ALL_SPOTS));
 		nameValuePairs.add(new BasicNameValuePair("user_lat", Float
@@ -73,13 +73,15 @@ public class ServerRequests {
 					// Storing each json item in variable
 					Float tmp_lat = Float.valueOf(c.getString("lat"));
 					Float tmp_lng = Float.valueOf(c.getString("lng"));
+					Float tmp_id = Float.valueOf(c.getString("id"));
 
 					// creating new HashMap
-					HashMap<String, Float> map = new HashMap<String, Float>();
+					HashMap<String, String> map = new HashMap<String, String>();
 
 					// adding each child node to HashMap key => value
-					map.put("user_lat", tmp_lat);
-					map.put("user_lng", tmp_lng);
+					map.put("spot_lat", Float.toString(tmp_lat));
+					map.put("spot_lng", Float.toString(tmp_lng));
+					map.put("spot_id", Float.toString(tmp_id));
 
 
 					// adding HashList to ArrayList
