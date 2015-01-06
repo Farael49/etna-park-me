@@ -50,33 +50,23 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 		mapFragment.getMapAsync(this);
 	}
 
-	
 	@Override
 	public void onMapReady(GoogleMap map) {
 		map.setMyLocationEnabled(true);
 		map.setOnMapClickListener(new OnMapClickListener() {
 
-	        @Override
-	        public void onMapClick(LatLng point) {
-	            Utils.showToastText(getApplicationContext(),"Map clicked at lat: " + point.latitude + " lng: " + point.longitude);
-	        }});
-		
+			@Override
+			public void onMapClick(LatLng point) {
+				Utils.showToastText(getApplicationContext(),
+						"Map clicked at lat: " + point.latitude + " lng: "
+								+ point.longitude);
+			}
+		});
+
 		if (gps.canGetLocation()) {
 			double latitude = gps.getLatitude();
 			double longitude = gps.getLongitude();
 			lastLoc = new LatLng(latitude, longitude);
-			/*
-			 * new GetSpots().execute(Double.toString(latitude),
-			 * Double.toString(longitude));
-			 */
-			/*
-			 * if (spotsInRange != null) for (HashMap<String, String> spot :
-			 * spotsInRange) map.addMarker(new MarkerOptions()
-			 * .title("Parking Spot") .snippet("Disponible dans 5 minutes")
-			 * .position( new LatLng(spot.get("user_lat"), spot
-			 * .get("user_lng"))));
-			 */
-			// \n is for new line
 			Toast.makeText(
 					getApplicationContext(),
 					"Your Location is - \nLat: " + latitude + "\nLong: "
@@ -88,11 +78,6 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 			gps.showSettingsAlert();
 		}
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastLoc, 13));
-		/*
-		 * map.addMarker(new MarkerOptions().title("Parking Spot")
-		 * .snippet("Disponible dans 5 minutes").position(lastLoc));
-		 */
-
 	}
 
 	/**
@@ -151,7 +136,8 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 						address = addresses.get(0).getAddressLine(0);
 						city = addresses.get(0).getLocality();
 					}
-					if (address == null || address.equals("Unnamed") || address.equals(city))
+					if (address == null || address.equals("Unnamed")
+							|| address.equals(city))
 						address = "";
 					if (city == null || city.equals("Unnamed"))
 						city = "";
@@ -169,11 +155,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 								new MarkerOptions()
 										.title("Parking Spot "
 												+ spot.get("spot_id"))
-										.snippet(
-										/*
-										 * "Lat : " + spot.get("spot_lat") +
-										 * " Long : " + spot.get("spot_lng") +
-										 */address + " " + city)
+										.snippet(address + " " + city)
 										.position(
 												new LatLng(
 														Float.valueOf(spot
@@ -181,7 +163,6 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 														Float.valueOf(spot
 																.get("spot_lng")))));
 			}
-			// Utils.showToastText(getApplicationContext(), actionStatus);
 		}
 
 	}

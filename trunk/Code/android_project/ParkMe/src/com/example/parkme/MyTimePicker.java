@@ -23,13 +23,11 @@ public class MyTimePicker extends TimePickerDialog {
 
 	@Override
 	public void updateTime(int hourOfDay, int minutOfHour) {
-		// TODO Auto-generated method stub
 		super.updateTime(hourOfDay, minutOfHour);
 	}
 
 	@Override
 	public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-		// TODO Auto-generated method stub
 		boolean validTime = true;
 		if (hourOfDay < minHour || (hourOfDay == minHour && minute < minMinute)) {
 			validTime = false;
